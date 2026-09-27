@@ -1,0 +1,178 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Anton", "Arial Narrow", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-body: "IBM Plex Sans", system-ui, sans-serif;
+
+  --color-bg: #fbfbfa;
+  --color-bg-raised: #ffffff;
+  --color-bg-panel: #f4f5f6;
+  --color-ink: #10151f;
+  --color-ink-dim: #5b6472;
+  --color-ink-faint: #94999f;
+  --color-red: #e8382c;
+  --color-red-dim: #f7cdc9;
+  --color-cyan: #0f8fa3;
+  --color-cyan-dim: #cdeef2;
+  --color-line: rgba(16, 21, 31, 0.09);
+  --color-line-strong: rgba(16, 21, 31, 0.14);
+
+  --breakpoint-xs: 420px;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-line);
+  }
+  html {
+    background-color: var(--color-bg);
+    color-scheme: light;
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-bg text-ink font-body antialiased;
+    font-feature-settings: "ss01" 1;
+  }
+  ::selection {
+    background: var(--color-red);
+    color: #ffffff;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer utilities {
+  .grid-overlay {
+    background-image:
+      linear-gradient(to right, var(--color-line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--color-line) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .mono-label {
+    font-family: var(--font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .noise {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  }
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+.animate-pulse-soft {
+  animation: pulse-soft 2.4s ease-in-out infinite;
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.animate-spin-slow {
+  animation: spin-slow 7s linear infinite;
+}
+
+@keyframes flicker {
+  0%, 92%, 100% { opacity: 1; }
+  95% { opacity: 0.3; }
+}
+.animate-flicker {
+  animation: flicker 3.2s ease-in-out infinite;
+}
+
+/* Vertical scan family — mirrors scan-x. These are applied to a WRAPPER
+   div sized to inset-0 (i.e. exactly the height of the scan area), so the
+   percentage translateY is computed against the full container height —
+   not the tiny height of the visible beam line inside it. This is what
+   makes the beam travel the complete top-to-bottom distance instead of
+   stopping partway. */
+@keyframes scan-tb {
+  0%, 100% { transform: translateY(-100%); }
+  50% { transform: translateY(100%); }
+}
+.animate-scan-tb {
+  animation: scan-tb 4s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  will-change: transform;
+}
+
+/* One-directional version — travels top to bottom and restarts while
+   fully off-screen, so the reset is never visible. Used by scanner-style
+   viewports (capture / analysis). */
+@keyframes scan-tb-loop {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+.animate-scan-tb-loop {
+  animation: scan-tb-loop 2.2s linear infinite;
+  will-change: transform;
+}
+
+@keyframes breathe {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(1.04); }
+}
+.animate-breathe {
+  animation: breathe 3.5s ease-in-out infinite;
+}
+
+/* Continuous left-right-right-left horizontal scan beam. Travels the
+   full width of its container and reverses smoothly at each edge. */
+@keyframes scan-x {
+  0%, 100% { transform: translateX(-100%); }
+  50% { transform: translateX(100%); }
+}
+.animate-scan-x {
+  animation: scan-x 4.6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  will-change: transform;
+}
+
+/* One-directional horizontal loop — used where a beam should travel
+   left to right and restart (rather than bounce back). */
+@keyframes scan-x-loop {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+.animate-scan-x-loop {
+  animation: scan-x-loop 2.6s linear infinite;
+  will-change: transform;
+}
+
+@keyframes breathe-fast {
+  0%, 100% { opacity: 0.45; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.06); }
+}
+.animate-breathe-fast {
+  animation: breathe-fast 2.1s ease-in-out infinite;
+}
+
+@keyframes glow-shift {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 0.7; }
+}
+.animate-glow-shift {
+  animation: glow-shift 4.2s ease-in-out infinite;
+}
+
+@keyframes ping-soft {
+  0% { transform: scale(0.4); opacity: 0.5; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+.animate-ping-soft {
+  animation: ping-soft 2.6s cubic-bezier(0.2, 0.6, 0.4, 1) infinite;
+}
